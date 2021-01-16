@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Paint for Browser</title>
+	</head>
+	
+	<body style="margin:0;overflow:hidden;">
+		<button onClick="shape=4;">thin pen</button>
+		<button onClick="shape=0;">line</button>
+		<button onClick="shape=1;">rectangle</button>
+		<button onClick="shape=2;">circle</button>
+		<button onClick="shape=3;">rubber</button>
+		<button onClick="undo();">undo</button>
+		<br>
+		<button style="background-color:red;" onClick="color='red';">&nbsp</button>
+		<button style="background-color:orange;" onClick="color='orange';">&nbsp</button>
+		<button style="background-color:yellow;" onClick="color='yellow';">&nbsp</button>
+		<button style="background-color:lightblue;" onClick="color='lightblue';">&nbsp</button>
+		<button style="background-color:blue;" onClick="color='blue';">&nbsp</button>
+		<button style="background-color:green;" onClick="color='green';">&nbsp</button>
+		<button style="background-color:lightgreen;" onClick="color='lightgreen';">&nbsp</button>
+		<button style="background-color:lightgray;" onClick="color='lightgray';">&nbsp</button>
+		<button style="background-color:black;" onClick="color='black';">&nbsp</button>
+		<input id="color" placeholder="custom color"></input>
+		<button onClick="customColor();">select color</button>
+		<canvas id="canvas"></canvas>
+	</body>
+	
+	<script type="text/javascript" src="paint.js"></script>
+</html>
