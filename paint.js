@@ -7,11 +7,62 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 // selected colour
-let color = "black";
+let color = "rgba(0, 0, 0, 1)";
+
+// validate color function
+function validateColor(color) {
+    if (color === '') {
+        return;
+	}
+    if (color.toLowerCase() === 'transparent') {
+        return [0, 0, 0, 0];
+	}
+    if (color[0] === '#') {
+        if (color.length < 7) {
+            // convert #RGB and #RGBA to #RRGGBB and #RRGGBBAA
+            color = '#' + color[1] + color[1] + color[2] + color[2] + color[3] + color[3] + (color.length > 4 ? color[4] + color[4] : '');
+        }
+        return [parseInt(color.substr(1, 2), 16),
+			parseInt(color.substr(3, 2), 16),
+			parseInt(color.substr(5, 2), 16),
+			color.length > 7 ? parseInt(color.substr(7, 2), 16)/255 : 1];
+    }
+    if (color.indexOf('rgb') === -1) {
+        // convert named colors
+        let tempElem = document.body.appendChild(document.createElement('fictum'));
+        let flag = 'rgb(1, 2, 3)';
+        tempElem.style.color = flag;
+        if (tempElem.style.color != flag) {
+            return; // color set failed
+        }
+		tempElem.style.color = color;
+        if (tempElem.style.color === flag || tempElem.style.color === '') {
+            return; // color parse failed
+		}
+        color = getComputedStyle(tempElem).color;
+        document.body.removeChild(tempElem);
+    }
+    if (color.indexOf('rgb') === 0) {
+        if (color.indexOf('rgba') === -1) {
+            color += ',1'; // convert 'rgb(R,G,B)' to 'rgb(R,G,B)A'
+        }
+		return color.match(/[\.\d]+/g).map(function (a) {
+            return +a;
+        });
+    }
+}
 
 // custom color
 function customColor() {
-	color = document.getElementById('color').value;
+	let colorPlaceholder = validateColor(document.getElementById('color').value);
+	try {
+		color = "rgba(" + colorPlaceholder[0] + ", " + colorPlaceholder[1] + ", " + colorPlaceholder[2] + ", " + colorPlaceholder[3] + ")";
+		document.getElementById('color').value = "";
+		document.getElementById('color').placeholder = "custom color";
+	} catch (err) {
+		document.getElementById('color').value = "";
+		document.getElementById('color').placeholder = "invalid input";
+	}
 }
 
 // selected drawing type
@@ -27,12 +78,14 @@ let rect = {
 	y: [],
 	w: [],
 	h: [],
+	fill: [],
 	color: []
 }
 let circ = {
 	x: [],
 	y: [],
 	r: [],
+	fill: [],
 	color: []
 }
 let line = {
@@ -48,6 +101,20 @@ let thinpen = {
 	x2: [],
 	y2: [],
 	color: []
+}
+
+// variable to determine whethter to fill or stroe shape
+let fillShape = true;
+
+// function to change fill type
+function changeFillType() {
+	if (fillShape) {
+		fillShape = false;
+		document.getElementById("fill type").innerHTML = "fill shapes";
+	} else {
+		fillShape = true;
+		document.getElementById("fill type").innerHTML = "outline shapes";
+	}
 }
 
 // variable to check if already drawing or not
@@ -97,12 +164,15 @@ function rubber() {
 				rect.y.splice(idx, 1);
 				rect.w.splice(idx, 1);
 				rect.h.splice(idx, 1);
+				rect.fill.splice(idx, 1);
 				rect.color.splice(idx, 1);
 			}
 		} else if (order[i][0] === "circ") {
 			if (mouseX > circ.x[idx] - circ.r[idx] && mouseY > circ.y[idx] - circ.r[idx] && mouseX < circ.x[idx] + circ.r[idx] && mouseY < circ.y[idx] + circ.r[idx]) {
 				circ.x.splice(idx, 1);
 				circ.y.splice(idx, 1);
+				circ.r.splice(idx, 1);
+				circ.fill.splice(idx, 1);
 				circ.color.splice(idx, 1);
 			}
 		}
@@ -112,28 +182,33 @@ function rubber() {
 // undo
 function undo() {
 	if (order[order.length-1][0] === "thin pen") {
-		thinpen.x1.splice(order[order.length-1][1], order[order.length-1][1].length);
-		thinpen.y1.splice(order[order.length-1][1], order[order.length-1][1].length);
-		thinpen.x2.splice(order[order.length-1][1], order[order.length-1][1].length);
-		thinpen.y2.splice(order[order.length-1][1], order[order.length-1][1].length);
-		thinpen.color.splice(order[order.length-1][1], order[order.length-1][1].length);
+		thinpen.x1.splice(order[order.length-1][1], 1);
+		thinpen.y1.splice(order[order.length-1][1], 1);
+		thinpen.x2.splice(order[order.length-1][1], 1);
+		thinpen.y2.splice(order[order.length-1][1], 1);
+		thinpen.color.splice(order[order.length-1][1], 1);
+		order.splice(order.length-1, 1);
 	} else if (order[order.length-1][0] === "line") {
-		line.x1.splice(order[order.length-1][1], order[order.length-1][1].length);
-		line.y1.splice(order[order.length-1][1], order[order.length-1][1].length);
-		line.x2.splice(order[order.length-1][1], order[order.length-1][1].length);
-		line.y2.splice(order[order.length-1][1], order[order.length-1][1].length);
-		line.color.splice(order[order.length-1][1], order[order.length-1][1].length);
+		line.x1.splice(order[order.length-1][1], 1);
+		line.y1.splice(order[order.length-1][1], 1);
+		line.x2.splice(order[order.length-1][1], 1);
+		line.y2.splice(order[order.length-1][1], 1);
+		line.color.splice(order[order.length-1][1], 1);
+		order.splice(order.length-1, 1);
 	} else if (order[order.length-1][0] === "rect") {
 		rect.x.splice(order[order.length-1][1], 1);
 		rect.y.splice(order[order.length-1][1], 1);
 		rect.w.splice(order[order.length-1][1], 1);
 		rect.h.splice(order[order.length-1][1], 1);
 		rect.color.splice(order[order.length-1][1], 1);
+		order.splice(order.length-1, 1);
 	} else if (order[order.length-1][0] === "circ") {
-		circ.x.splice(order[order.length-1][1], order[order.length-1][1].length);
-		circ.y.splice(order[order.length-1][1], order[order.length-1][1].length);
-		circ.r.splice(order[order.length-1][1], order[order.length-1][1].length);
-		circ.color.splice(order[order.length-1][1], order[order.length-1][1].length);
+		circ.x.splice(order[order.length-1][1], 1);
+		circ.y.splice(order[order.length-1][1], 1);
+		circ.r.splice(order[order.length-1][1], 1);
+		circ.fill.splice(order[order.length-1][1], 1);
+		circ.color.splice(order[order.length-1][1], 1);
+		order.splice(order.length-1, 1);
 	}
 }
 
@@ -152,13 +227,29 @@ function render() {
 			ctx.lineTo(line.x2[order[i][1]], line.y2[order[i][1]]);
 			ctx.stroke();
 		} else if (order[i][0] === "rect") {
-			ctx.fillStyle = rect.color[order[i][1]];
+			if (rect.fill[order[i][1]]) {
+				ctx.fillStyle = rect.color[order[i][1]];
+			} else {
+				ctx.strokeStyle = rect.color[order[i][1]];
+			}
 			ctx.rect(rect.x[order[i][1]], rect.y[order[i][1]], rect.w[order[i][1]], rect.h[order[i][1]]);
-			ctx.fill();
+			if (rect.fill[order[i][1]]) {
+				ctx.fill();
+			} else {
+				ctx.stroke();
+			}
 		} else if (order[i][0] === "circ") {
-			ctx.fillStyle = circ.color[order[i][1]];
+			if (circ.fill[order[i][1]]) {
+				ctx.fillStyle = circ.color[order[i][1]];
+			} else {
+				ctx.strokeStyle = circ.color[order[i][1]];
+			}
 			ctx.arc(circ.x[order[i][1]], circ.y[order[i][1]], circ.r[order[i][1]], 0, Math.PI * 2);
-			ctx.fill();
+			if (circ.fill[order[i][1]]) {
+				ctx.fill();
+			} else {
+				ctx.stroke();
+			}
 		}
 		ctx.closePath();
 	}
@@ -181,7 +272,7 @@ let paint = setInterval(function () {
 				rect.w[rect.w.length-1] = mouseX - rect.x[rect.x.length-1];
 				rect.h[rect.h.length-1] = mouseY - rect.y[rect.y.length-1];
 			} else if (shapes[shape] === "circle") {
-				circ.r[circ.r.length-1] = Math.abs(Math.round(mouseX - circ.x));
+				circ.r[circ.r.length-1] = Math.abs((mouseX - circ.x[circ.x.length-1]) + (mouseY - circ.y[circ.y.length-1]) / 2);
 			} else if (shapes[shape] === "rubber") {
 				rubber();
 			}
@@ -207,12 +298,14 @@ let paint = setInterval(function () {
 				rect.y.push(mouseY);
 				rect.w.push(0);
 				rect.h.push(0);
+				rect.fill.push(fillShape);
 				rect.color.push(color);
 				order.push(["rect", rect.x.length-1]);
 			} else if (shapes[shape] === "circle") {
 				circ.x.push(mouseX);
 				circ.y.push(mouseY);
 				circ.r.push(1);
+				circ.fill.push(fillShape);
 				circ.color.push(color);
 				order.push(["circ", circ.x.length-1]);
 			} else if (shapes[shape] === "rubber") {
