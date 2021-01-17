@@ -5,26 +5,29 @@
 		<title>Paint for Browser</title>
 	</head>
 	
-	<body style="margin:0;overflow:hidden;">
-		<button onClick="shape=4;">thin pen</button>
-		<button onClick="shape=0;">line</button>
-		<button onClick="shape=1;">rectangle</button>
-		<button onClick="shape=2;">circle</button>
-		<button onClick="shape=3;">rubber</button>
+	<body style="margin: 0; overflow: hidden;">
+		<button onClick="shape = 4;">thin pen</button>
+		<button onClick="shape = 0;">line</button>
+		<button onClick="shape = 1;">rectangle</button>
+		<button onClick="shape = 2;">circle</button>
+		<button id="fill type" onClick="changeFillType();">outline shapes</button>
+		<button onClick="shape = 3;">rubber</button>
 		<button onClick="undo();">undo</button>
 		<br>
-		<button style="background-color:red;" onClick="color='red';">&nbsp</button>
-		<button style="background-color:orange;" onClick="color='orange';">&nbsp</button>
-		<button style="background-color:yellow;" onClick="color='yellow';">&nbsp</button>
-		<button style="background-color:lightblue;" onClick="color='lightblue';">&nbsp</button>
-		<button style="background-color:blue;" onClick="color='blue';">&nbsp</button>
-		<button style="background-color:green;" onClick="color='green';">&nbsp</button>
-		<button style="background-color:lightgreen;" onClick="color='lightgreen';">&nbsp</button>
-		<button style="background-color:lightgray;" onClick="color='lightgray';">&nbsp</button>
-		<button style="background-color:black;" onClick="color='black';">&nbsp</button>
+		<button style="background-color: red;" onClick="let colorPlaceholder = validateColor('red');color = 'rgba(' + colorPlaceholder[0] + ', ' + colorPlaceholder[1] + ', ' + colorPlaceholder[2] + ', ' + document.getElementById('alpha').value + ')';">&nbsp</button>
+		<button style="background-color: orange;" onClick="let colorPlaceholder = validateColor('orange');color = 'rgba(' + colorPlaceholder[0] + ', ' + colorPlaceholder[1] + ', ' + colorPlaceholder[2] + ', ' + document.getElementById('alpha').value + ')';;">&nbsp</button>
+		<button style="background-color: yellow;" onClick="let colorPlaceholder = validateColor('yellow');color = 'rgba(' + colorPlaceholder[0] + ', ' + colorPlaceholder[1] + ', ' + colorPlaceholder[2] + ', ' + document.getElementById('alpha').value + ')';">&nbsp</button>
+		<button style="background-color: lightblue;" onClick="let colorPlaceholder = validateColor('lightblue');color = 'rgba(' + colorPlaceholder[0] + ', ' + colorPlaceholder[1] + ', ' + colorPlaceholder[2] + ', ' + document.getElementById('alpha').value + ')';">&nbsp</button>
+		<button style="background-color: blue;" onClick="let colorPlaceholder = validateColor('blue');color = 'rgba(' + colorPlaceholder[0] + ', ' + colorPlaceholder[1] + ', ' + colorPlaceholder[2] + ', ' + document.getElementById('alpha').value + ')';">&nbsp</button>
+		<button style="background-color: green;" onClick="let colorPlaceholder = validateColor('green');color = 'rgba(' + colorPlaceholder[0] + ', ' + colorPlaceholder[1] + ', ' + colorPlaceholder[2] + ', ' + document.getElementById('alpha').value + ')';">&nbsp</button>
+		<button style="background-color: lightgreen;" onClick="let colorPlaceholder = validateColor('lightgreen');color = 'rgba(' + colorPlaceholder[0] + ', ' + colorPlaceholder[1] + ', ' + colorPlaceholder[2] + ', ' + document.getElementById('alpha').value + ')';;">&nbsp</button>
+		<button style="background-color: lightgray;" onClick="let colorPlaceholder = validateColor('lightgray');color = 'rgba(' + colorPlaceholder[0] + ', ' + colorPlaceholder[1] + ', ' + colorPlaceholder[2] + ', ' + document.getElementById('alpha').value + ')';">&nbsp</button>
+		<button style="background-color: black;" onClick="let colorPlaceholder = validateColor('black');color = 'rgba(' + colorPlaceholder[0] + ', ' + colorPlaceholder[1] + ', ' + colorPlaceholder[2] + ', ' + document.getElementById('alpha').value + ')';;">&nbsp</button>
+		<label>Transparency:</label>
+		<input type="range" min="0" max="100" value="100" onChange="validateColor(color);" id="alpha"</input>
 		<input id="color" placeholder="custom color"></input>
 		<button onClick="customColor();">select color</button>
-		<canvas id="canvas"></canvas>
+		<canvas id="canvas">A required feature is not supported by your browser</canvas>
 	</body>
 	
 	<script type="text/javascript" src="paint.js"></script>
