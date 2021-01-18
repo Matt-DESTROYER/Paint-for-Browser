@@ -65,6 +65,12 @@ function customColor() {
 	}
 }
 
+// line width
+let lineW = 1;
+function lineWidth() {
+	lineW = document.getElementById('lineWidth').value;
+}
+
 // selected drawing type
 let shapes = ["line", "rectangle", "circle", "rubber", "thin pen"];
 let shape = 4;
@@ -93,6 +99,7 @@ let line = {
 	y1: [],
 	x2: [],
 	y2: [],
+	w: [],
 	color: []
 }
 let thinpen = {
@@ -218,11 +225,13 @@ function render() {
 		ctx.beginPath();
 		if (order[i][0] === "thin pen") {
 			ctx.strokeStyle = thinpen.color[order[i][1]];
+			ctx.lineWidth = 1;
 			ctx.moveTo(thinpen.x1[order[i][1]], thinpen.y1[order[i][1]]);
 			ctx.lineTo(thinpen.x2[order[i][1]], thinpen.y2[order[i][1]]);
 			ctx.stroke();
 		} else if (order[i][0] === "line") {
 			ctx.strokeStyle = line.color[order[i][1]];
+			ctx.lineWidth = line.w[order[i][1]];
 			ctx.moveTo(line.x1[order[i][1]], line.y1[order[i][1]]);
 			ctx.lineTo(line.x2[order[i][1]], line.y2[order[i][1]]);
 			ctx.stroke();
@@ -272,7 +281,7 @@ let paint = setInterval(function () {
 				rect.w[rect.w.length-1] = mouseX - rect.x[rect.x.length-1];
 				rect.h[rect.h.length-1] = mouseY - rect.y[rect.y.length-1];
 			} else if (shapes[shape] === "circle") {
-				circ.r[circ.r.length-1] = Math.abs((mouseX - circ.x[circ.x.length-1]) + (mouseY - circ.y[circ.y.length-1]) / 2);
+				circ.r[circ.r.length-1] = Math.sqrt(Math.pow(mouseX - circ.x[circ.x.length-1], 2) + Math.pow(mouseY - circ.y[circ.y.length-1], 2));
 			} else if (shapes[shape] === "rubber") {
 				rubber();
 			}
@@ -291,6 +300,7 @@ let paint = setInterval(function () {
 				line.y1.push(mouseY);
 				line.x2.push(mouseX);
 				line.y2.push(mouseY);
+				line.w.push(lineW);
 				line.color.push(color);
 				order.push(["line", line.x1.length-1]);
 			} else if (shapes[shape] === "rectangle") {
