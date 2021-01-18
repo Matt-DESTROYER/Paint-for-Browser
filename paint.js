@@ -22,10 +22,7 @@ function validateColor(color) {
             // convert #RGB and #RGBA to #RRGGBB and #RRGGBBAA
             color = '#' + color[1] + color[1] + color[2] + color[2] + color[3] + color[3] + (color.length > 4 ? color[4] + color[4] : '');
         }
-        return [parseInt(color.substr(1, 2), 16),
-			parseInt(color.substr(3, 2), 16),
-			parseInt(color.substr(5, 2), 16),
-			color.length > 7 ? parseInt(color.substr(7, 2), 16)/255 : 1];
+        return [parseInt(color.substr(1, 2), 16), parseInt(color.substr(3, 2), 16), parseInt(color.substr(5, 2), 16), color.length > 7 ? parseInt(color.substr(7, 2), 16)/255 : 1];
     }
     if (color.indexOf('rgb') === -1) {
         // convert named colors
@@ -196,11 +193,11 @@ function rubber() {
 // undo
 function undo() {
 	if (order[order.length-1][0] === "thin pen") {
-		thinpen.x1.splice(order[order.length-1][1], 1);
-		thinpen.y1.splice(order[order.length-1][1], 1);
-		thinpen.x2.splice(order[order.length-1][1], 1);
-		thinpen.y2.splice(order[order.length-1][1], 1);
-		thinpen.color.splice(order[order.length-1][1], 1);
+		thinpen.x1.splice(order[order.length-1][1][0], order[order.length-1][1].length);
+		thinpen.y1.splice(order[order.length-1][1][0], order[order.length-1][1].length);
+		thinpen.x2.splice(order[order.length-1][1][0], order[order.length-1][1].length);
+		thinpen.y2.splice(order[order.length-1][1][0], order[order.length-1][1].length);
+		thinpen.color.splice(order[order.length-1][1][0], order[order.length-1][1].length);
 		order.splice(order.length-1, 1);
 	} else if (order[order.length-1][0] === "line") {
 		line.x1.splice(order[order.length-1][1], 1);
@@ -231,10 +228,12 @@ function render() {
 	for (let i = 0; i < order.length; i++) {
 		ctx.beginPath();
 		if (order[i][0] === "thin pen") {
-			ctx.strokeStyle = thinpen.color[order[i][1]];
+			ctx.strokeStyle = thinpen.color[order[i][1][0]];
 			ctx.lineWidth = 1;
-			ctx.moveTo(thinpen.x1[order[i][1]], thinpen.y1[order[i][1]]);
-			ctx.lineTo(thinpen.x2[order[i][1]], thinpen.y2[order[i][1]]);
+			for (let idx = 0; idx < order[i][1].length; idx++) {
+				ctx.moveTo(thinpen.x1[order[i][1][idx]], thinpen.y1[order[i][1][idx]]);
+				ctx.lineTo(thinpen.x2[order[i][1][idx]], thinpen.y2[order[i][1][idx]]);
+			}
 			ctx.stroke();
 		} else if (order[i][0] === "line") {
 			ctx.strokeStyle = line.color[order[i][1]];
@@ -280,7 +279,7 @@ let paint = setInterval(function () {
 				thinpen.x2.push(mouseX);
 				thinpen.y2.push(mouseY);
 				thinpen.color.push(color);
-				order.push(["thin pen", thinpen.x1.length-1]);
+				order[order.length-1][1].push(thinpen.x1.length-1);
 			} else if (shapes[shape] === "line") {
 				line.x2[line.x2.length-1] = mouseX;
 				line.y2[line.y2.length-1] = mouseY;
@@ -288,7 +287,7 @@ let paint = setInterval(function () {
 				rect.w[rect.w.length-1] = mouseX - rect.x[rect.x.length-1];
 				rect.h[rect.h.length-1] = mouseY - rect.y[rect.y.length-1];
 			} else if (shapes[shape] === "circle") {
-				circ.r[circ.r.length-1] = Math.sqrt(Math.pow(mouseX - circ.x[circ.x.length-1], 2) + Math.pow(mouseY - circ.y[circ.y.length-1], 2));
+				circ.r[circ.r.length-1] = Math.round(Math.sqrt(Math.pow(mouseX - circ.x[circ.x.length-1], 2) + Math.pow(mouseY - circ.y[circ.y.length-1], 2)));
 			} else if (shapes[shape] === "rubber") {
 				rubber();
 			}
@@ -301,7 +300,7 @@ let paint = setInterval(function () {
 				thinpen.x2.push(mouseX);
 				thinpen.y2.push(mouseY);
 				thinpen.color.push(color);
-				order.push(["thin pen", thinpen.x1.length-1]);
+				order.push(["thin pen", [thinpen.x1.length-1]]);
 			} else if (shapes[shape] === "line") {
 				line.x1.push(mouseX);
 				line.y1.push(mouseY);
