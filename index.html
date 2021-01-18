@@ -8,6 +8,8 @@
 	<body style="margin: 0; overflow: hidden;">
 		<button onClick="shape = 4;">thin pen</button>
 		<button onClick="shape = 0;">line</button>
+		<label>Line width:</label>
+		<input type="range" min="1" max="10" value="1" onChange="lineWidth();" id="lineWidth"</input>
 		<button onClick="shape = 1;">rectangle</button>
 		<button onClick="shape = 2;">circle</button>
 		<button id="fill type" onClick="changeFillType();">outline shapes</button>
