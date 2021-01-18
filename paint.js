@@ -124,6 +124,13 @@ function changeFillType() {
 	}
 }
 
+// function to save canvas as png
+function download() {
+	let download = document.getElementById("download");
+	let img = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+	download.href = img;
+};
+
 // variable to check if already drawing or not
 let alreadyDrawing = false;
 
