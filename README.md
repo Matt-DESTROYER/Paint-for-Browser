@@ -3,11 +3,11 @@ A simple paint program made to run in browser.
 
 # Tools/Options for customisation
 - Thin pen
-- Line
-- Line width
 - Rectangle
 - Circle
 - Fill/Outline
+- Line
+- Line width
 - Rubber (work-in-progress)
 - Undo
 - Default colors
