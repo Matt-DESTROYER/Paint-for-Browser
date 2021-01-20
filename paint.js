@@ -64,9 +64,6 @@ function customColor() {
 
 // line width
 let lineW = 1;
-function lineWidth() {
-	lineW = document.getElementById('lineWidth').value;
-}
 
 // selected drawing type
 let shapes = ["line", "rectangle", "circle", "rubber", "thin pen"];
@@ -82,6 +79,7 @@ let rect = {
 	w: [],
 	h: [],
 	fill: [],
+	lW: [],
 	color: []
 }
 let circ = {
@@ -89,6 +87,7 @@ let circ = {
 	y: [],
 	r: [],
 	fill: [],
+	lW: [],
 	color: []
 }
 let line = {
@@ -204,6 +203,7 @@ function undo() {
 		line.y1.splice(order[order.length-1][1], 1);
 		line.x2.splice(order[order.length-1][1], 1);
 		line.y2.splice(order[order.length-1][1], 1);
+		line.w.splice(order[order.length-1][1], 1);
 		line.color.splice(order[order.length-1][1], 1);
 		order.splice(order.length-1, 1);
 	} else if (order[order.length-1][0] === "rect") {
@@ -211,6 +211,7 @@ function undo() {
 		rect.y.splice(order[order.length-1][1], 1);
 		rect.w.splice(order[order.length-1][1], 1);
 		rect.h.splice(order[order.length-1][1], 1);
+		rect.lW.splice(order[order.length-1][1], 1);
 		rect.color.splice(order[order.length-1][1], 1);
 		order.splice(order.length-1, 1);
 	} else if (order[order.length-1][0] === "circ") {
@@ -218,6 +219,7 @@ function undo() {
 		circ.y.splice(order[order.length-1][1], 1);
 		circ.r.splice(order[order.length-1][1], 1);
 		circ.fill.splice(order[order.length-1][1], 1);
+		circ.lW.splice(order[order.length-1][1], 1);
 		circ.color.splice(order[order.length-1][1], 1);
 		order.splice(order.length-1, 1);
 	}
@@ -246,6 +248,7 @@ function render() {
 				ctx.fillStyle = rect.color[order[i][1]];
 			} else {
 				ctx.strokeStyle = rect.color[order[i][1]];
+				ctx.lineWidth = rect.lW[order[i][1]];
 			}
 			ctx.rect(rect.x[order[i][1]], rect.y[order[i][1]], rect.w[order[i][1]], rect.h[order[i][1]]);
 			if (rect.fill[order[i][1]]) {
@@ -258,6 +261,7 @@ function render() {
 				ctx.fillStyle = circ.color[order[i][1]];
 			} else {
 				ctx.strokeStyle = circ.color[order[i][1]];
+				ctx.lineWidth = circ.lW[order[i][1]];
 			}
 			ctx.arc(circ.x[order[i][1]], circ.y[order[i][1]], circ.r[order[i][1]], 0, Math.PI * 2);
 			if (circ.fill[order[i][1]]) {
@@ -315,6 +319,7 @@ let paint = setInterval(function () {
 				rect.w.push(0);
 				rect.h.push(0);
 				rect.fill.push(fillShape);
+				rect.lW.push(lineW);
 				rect.color.push(color);
 				order.push(["rect", rect.x.length-1]);
 			} else if (shapes[shape] === "circle") {
@@ -322,6 +327,7 @@ let paint = setInterval(function () {
 				circ.y.push(mouseY);
 				circ.r.push(1);
 				circ.fill.push(fillShape);
+				circ.lW.push(lineW);
 				circ.color.push(color);
 				order.push(["circ", circ.x.length-1]);
 			} else if (shapes[shape] === "rubber") {
