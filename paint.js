@@ -285,7 +285,9 @@ function render() {
 
 let paint = setInterval(function () {
 	if (mouseDown) {
-		if (alreadyDrawing) {
+		if (previousMouseX === mouseX && previousMouseY === mouseY) {
+			
+		} else if (alreadyDrawing) {
 			if (shapes[shape] === "thin pen") {
 				thinpen.x1.push(previousMouseX);
 				thinpen.y1.push(previousMouseY);
@@ -304,8 +306,6 @@ let paint = setInterval(function () {
 			} else if (shapes[shape] === "rubber") {
 				rubber();
 			}
-		} else if (previousMouseX === mouseX && previousMouseY === mouseY) {
-			
 		} else {
 			if (shapes[shape] === "thin pen") {
 				thinpen.x1.push(previousMouseX);
