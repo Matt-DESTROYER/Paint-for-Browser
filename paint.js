@@ -200,37 +200,39 @@ function rubber() {
 
 // undo
 function undo() {
-	if (order[order.length-1][0] === "thin pen") {
-		thinpen.x1.splice(order[order.length-1][1][0], order[order.length-1][1].length);
-		thinpen.y1.splice(order[order.length-1][1][0], order[order.length-1][1].length);
-		thinpen.x2.splice(order[order.length-1][1][0], order[order.length-1][1].length);
-		thinpen.y2.splice(order[order.length-1][1][0], order[order.length-1][1].length);
-		thinpen.color.splice(order[order.length-1][1][0], order[order.length-1][1].length);
-		order.splice(order.length-1, 1);
-	} else if (order[order.length-1][0] === "line") {
-		line.x1.splice(order[order.length-1][1], 1);
-		line.y1.splice(order[order.length-1][1], 1);
-		line.x2.splice(order[order.length-1][1], 1);
-		line.y2.splice(order[order.length-1][1], 1);
-		line.w.splice(order[order.length-1][1], 1);
-		line.color.splice(order[order.length-1][1], 1);
-		order.splice(order.length-1, 1);
-	} else if (order[order.length-1][0] === "rect") {
-		rect.x.splice(order[order.length-1][1], 1);
-		rect.y.splice(order[order.length-1][1], 1);
-		rect.w.splice(order[order.length-1][1], 1);
-		rect.h.splice(order[order.length-1][1], 1);
-		rect.lW.splice(order[order.length-1][1], 1);
-		rect.color.splice(order[order.length-1][1], 1);
-		order.splice(order.length-1, 1);
-	} else if (order[order.length-1][0] === "circ") {
-		circ.x.splice(order[order.length-1][1], 1);
-		circ.y.splice(order[order.length-1][1], 1);
-		circ.r.splice(order[order.length-1][1], 1);
-		circ.fill.splice(order[order.length-1][1], 1);
-		circ.lW.splice(order[order.length-1][1], 1);
-		circ.color.splice(order[order.length-1][1], 1);
-		order.splice(order.length-1, 1);
+	if (order.length > 0) {
+		if (order[order.length-1][0] === "thin pen") {
+			thinpen.x1.splice(order[order.length-1][1][0], order[order.length-1][1].length);
+			thinpen.y1.splice(order[order.length-1][1][0], order[order.length-1][1].length);
+			thinpen.x2.splice(order[order.length-1][1][0], order[order.length-1][1].length);
+			thinpen.y2.splice(order[order.length-1][1][0], order[order.length-1][1].length);
+			thinpen.color.splice(order[order.length-1][1][0], order[order.length-1][1].length);
+			order.splice(order.length-1, 1);
+		} else if (order[order.length-1][0] === "line") {
+			line.x1.splice(order[order.length-1][1], 1);
+			line.y1.splice(order[order.length-1][1], 1);
+			line.x2.splice(order[order.length-1][1], 1);
+			line.y2.splice(order[order.length-1][1], 1);
+			line.w.splice(order[order.length-1][1], 1);
+			line.color.splice(order[order.length-1][1], 1);
+			order.splice(order.length-1, 1);
+		} else if (order[order.length-1][0] === "rect") {
+			rect.x.splice(order[order.length-1][1], 1);
+			rect.y.splice(order[order.length-1][1], 1);
+			rect.w.splice(order[order.length-1][1], 1);
+			rect.h.splice(order[order.length-1][1], 1);
+			rect.lW.splice(order[order.length-1][1], 1);
+			rect.color.splice(order[order.length-1][1], 1);
+			order.splice(order.length-1, 1);
+		} else if (order[order.length-1][0] === "circ") {
+			circ.x.splice(order[order.length-1][1], 1);
+			circ.y.splice(order[order.length-1][1], 1);
+			circ.r.splice(order[order.length-1][1], 1);
+			circ.fill.splice(order[order.length-1][1], 1);
+			circ.lW.splice(order[order.length-1][1], 1);
+			circ.color.splice(order[order.length-1][1], 1);
+			order.splice(order.length-1, 1);
+		}
 	}
 }
 
