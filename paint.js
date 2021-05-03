@@ -81,7 +81,7 @@ let rect = {
 	fill: [],
 	lW: [],
 	color: []
-}
+};
 let circ = {
 	x: [],
 	y: [],
@@ -89,7 +89,7 @@ let circ = {
 	fill: [],
 	lW: [],
 	color: []
-}
+};
 let line = {
 	x1: [],
 	y1: [],
@@ -97,14 +97,14 @@ let line = {
 	y2: [],
 	w: [],
 	color: []
-}
+};
 let thinpen = {
 	x1: [],
 	y1: [],
 	x2: [],
 	y2: [],
 	color: []
-}
+};
 
 // variable to determine whethter to fill or stroe shape
 let fillShape = true;
