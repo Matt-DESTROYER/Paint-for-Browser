@@ -125,7 +125,7 @@ function download() {
 	let download = document.getElementById("download");
 	let img = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 	download.href = img;
-};
+}
 
 // variable to check if already drawing or not
 let alreadyDrawing = false;
@@ -146,6 +146,15 @@ canvas.addEventListener('mousedown', e => {
 canvas.addEventListener('mouseup', e => {
 	mouseDown = false;
 });
+
+// point in rect
+function pointInRect(pointX, pointY, rectX, rectY, rectW, rectH) {
+	const rectX2 = rectX + rectW, rectY2 = rectY + rectH;
+	if (pointX > rectX && pointX < rectX2 && pointY > rectY && pointY < rectY2) {
+		return true;
+	}
+	return false;
+}
 
 // rubber
 function rubber() {
