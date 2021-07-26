@@ -1,6 +1,8 @@
 # Paint-for-Browser
 A simple paint program made to run in browser.
 
+NOTE: Complete remake in progress.
+
 # Tools/Options for customisation
 - Thin pen
 - Rectangle
