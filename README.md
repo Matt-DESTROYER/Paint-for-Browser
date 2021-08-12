@@ -1,18 +1,12 @@
-# Paint-for-Browser
+# Paint-for-Browser v2.0!
 A simple paint program made to run in browser.
 
-NOTE: Complete remake (improved + more features) COMING SOON!
-
 # Tools/Options for customisation
-- Thin pen
+- Pen
 - Rectangle
 - Circle
-- Fill/Outline
+- Oval
 - Line
-- Line width
-- Rubber (work-in-progress)
-- Undo
-- Default colors
-- Transparency (work-in-progress)
-- Custom color (takes rgb, rgba, hex or color name)
-- Save as
+- Rubber
+- Undo & Redo
+- Download image
