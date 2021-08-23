@@ -258,4 +258,4 @@ function paint() {
 	window.requestAnimationFrame(paint);
 }
 
-window.requestAnimationFrame(paint);
+paint();
