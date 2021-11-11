@@ -4,17 +4,22 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="theme-color" content="#000000">
 	<title>Paint for Browser</title>
-	<link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32" />
+	<link rel="icon" type="image/png" href="favicon.png" sizes="32x32" />
+	<link rel="manifest" href="manifest.webmanifest" />
+	<script type="text/javascript" src="register-sw.js"></script>
 	<link href="styles.css" rel="stylesheet" type="text/css" />
-	<script src="scripts.js" defer></script>
+	<script type="text/javascript" src="touchscreen.js"></script>
+	<script type="text/javascript" src="scripts.js" defer></script>
 </head>
 
 <body>
 	<nav>
 		<div class="container">
 			<div class="colours">
-				<button class="red" onclick="Paint.colour = 'rgb(255, 0, 0)'">&nbsp;</button>
+				<button class="red" onclick="Paint.colour = 'red'">&nbsp;</button>
 				<button class="orange" onclick="Paint.colour = 'orange'">&nbsp;</button>
 				<button class="yellow" onclick="Paint.colour = 'yellow'">&nbsp;</button>
 				<button class="lightblue" onclick="Paint.colour = 'rgb(0, 122, 186)';">&nbsp;</button>
@@ -22,7 +27,7 @@
 				<button class="green" onclick="Paint.colour = 'rgb(24, 168, 24)';">&nbsp;</button>
 				<button class="lightgreen" onclick="Paint.colour = 'rgb(58, 231, 58)';">&nbsp;</button>
 				<button class="gray" onclick="Paint.colour = 'gray';">&nbsp;</button>
-				<button class="black" onclick="Paint.colour = 'rgb(0, 0, 0)';">&nbsp;</button>
+				<button class="black" onclick="Paint.colour = 'black';">&nbsp;</button>
 				<input type="color" value="#ff0000" oninput="Paint.colour = this.value;" />
 			</div>
 			<select oninput="Paint.type = this.value">
@@ -33,7 +38,7 @@
 				<option value="line">line</option>
 				<option value="rubber">rubber</option>
 			</select>
-			<input type="range" min="0" max="50" oninput="Paint.thickness = this.value;" value="1" />
+			<input type="range" min="1" max="50" oninput="Paint.thickness = this.value;" value="1" />
 			<a id="download" download="image.png">
 				<button class="saveas" onclick="download()">Download Image</button>
 			</a>
