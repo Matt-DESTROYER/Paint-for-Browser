@@ -3,13 +3,13 @@
 	"name": "Paint for Browser",
 	"icons": [
 		{
-			"src": "Icons/192.png",
+			"src": "192.png",
 			"type": "image/png",
 			"sizes": "192x192",
 			"purpose": "any maskable"
 		},
 		{
-			"src": "Icons/512.png",
+			"src": "512.png",
 			"type": "image/png",
 			"sizes": "512x512",
 			"purpose": "any maskable"
