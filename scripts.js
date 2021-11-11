@@ -8,17 +8,55 @@ canvas.height = window.innerHeight;
 
 // event listeners
 let mouseX, mouseY, pmouseX, pmouseY, mouseDown = false;
-canvas.addEventListener('mousemove', e => {
+if ("ontouchstart" in window) {
+	alert("Tablet touches enabled");
+	function ongoingTouchIndexById(idToFind) {
+		for (let i = 0; i < ongoingTouches.length; i++) if (ongoingTouches[i].identifier === idToFind) return i;
+		return -1;
+	}
+	canvas.addEventListener("touchstart", function (e) {
+		e.preventDefault();
+		let touches = e.changedTouches;
+		pmouseX = mouseX;
+		pmouseY = mouseY;
+		mouseX = touches[0].pageX;
+		mouseY = touches[0].pageY;
+		mouseDown = true;
+	}, false);
+	canvas.addEventListener("touchend", function (e) {
+		e.preventDefault();
+		let touches = e.changedTouches;
+		let idx = ongoingTouchIndexById(touches[0].identifier);
+		if (idx >= 0) {
+			pmouseX = mouseX;
+			pmouseY = mouseY;
+			mouseX = touches[0].pageX;
+			mouseY = touches[0].pageY;
+		}
+		if (touches.length === 0) {
+			mouseDown = false;
+		}
+	}, false);
+	canvas.addEventListener("touchmove", function (e) {
+		e.preventDefault();
+		let touches = e.changedTouches;
+		pmouseX = mouseX;
+		pmouseY = mouseY;
+		mouseX = touches[0].pageX;
+		mouseY = touches[0].pageY;
+	}, false);
+}
+canvas.addEventListener("mousemove", e => {
 	let rect = canvas.getBoundingClientRect();
 	pmouseX = mouseX;
 	pmouseY = mouseY;
 	mouseX = e.clientX - rect.left;
 	mouseY = e.clientY - rect.top;
 });
-canvas.addEventListener('mousedown', e => {
+canvas.addEventListener("mousedown", e => {
 	mouseDown = true;
 });
-canvas.addEventListener('mouseup', e => {
+canvas.addEventListener("mouseup", e => {
 	mouseDown = false;
 });
 
@@ -258,4 +296,4 @@ function paint() {
 	window.requestAnimationFrame(paint);
 }
 
-paint();
+window.requestAnimationFrame(paint);
