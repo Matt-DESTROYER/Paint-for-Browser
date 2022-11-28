@@ -14,7 +14,7 @@ if ("ontouchstart" in window) {
 		for (let i = 0; i < ongoingTouches.length; i++) if (ongoingTouches[i].identifier === idToFind) return i;
 		return -1;
 	}
-	canvas.addEventListener("touchstart", function (e) {
+	window.addEventListener("touchstart", function (e) {
 		e.preventDefault();
 		let touches = e.changedTouches;
 		pmouseX = mouseX;
@@ -23,7 +23,7 @@ if ("ontouchstart" in window) {
 		mouseY = touches[0].pageY;
 		mouseDown = true;
 	}, false);
-	canvas.addEventListener("touchend", function (e) {
+	window.addEventListener("touchend", function (e) {
 		e.preventDefault();
 		let touches = e.changedTouches;
 		let idx = ongoingTouchIndexById(touches[0].identifier);
@@ -37,7 +37,7 @@ if ("ontouchstart" in window) {
 			mouseDown = false;
 		}
 	}, false);
-	canvas.addEventListener("touchmove", function (e) {
+	window.addEventListener("touchmove", function (e) {
 		e.preventDefault();
 		let touches = e.changedTouches;
 		pmouseX = mouseX;
@@ -46,17 +46,17 @@ if ("ontouchstart" in window) {
 		mouseY = touches[0].pageY;
 	}, false);
 }
-canvas.addEventListener("mousemove", e => {
+window.addEventListener("mousemove", e => {
 	let rect = canvas.getBoundingClientRect();
 	pmouseX = mouseX;
 	pmouseY = mouseY;
 	mouseX = e.clientX - rect.left;
 	mouseY = e.clientY - rect.top;
 });
-canvas.addEventListener("mousedown", e => {
+window.addEventListener("mousedown", e => {
 	mouseDown = true;
 });
-canvas.addEventListener("mouseup", e => {
+window.addEventListener("mouseup", e => {
 	mouseDown = false;
 });
 
