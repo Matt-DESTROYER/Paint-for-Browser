@@ -273,6 +273,7 @@ class RubberObject {
 }
 
 const Paint = Object.seal({
+	colours: Object.freeze(["red", "orange", "yellow", "lightblue", "blue", "green", "lightgreen", "gray", "black"]),
 	objects: [],
 	backup: [],
 	type: "pen",
@@ -280,6 +281,22 @@ const Paint = Object.seal({
 	fill: true,
 	thickness: 1,
 	drawing: false,
+	init: function() {
+		for (const colour of this.colours) {
+			document.querySelector(".colour." + colour)
+				.addEventListener("click", function() {
+					Paint.colour = colour;
+				});
+		}
+
+		function paint() {
+			Paint.update();
+			Paint.render();
+			window.requestAnimationFrame(paint);
+		}
+		
+		paint();
+	},
 	update: function () {
 		if (this.drawing) {
 			if (mouse.x !== mouse.prev.x || mouse.y !== mouse.prev.y) {
@@ -363,10 +380,5 @@ function download() {
 	document.getElementById("download").href = ctx.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 }
 
-function paint() {
-	Paint.update();
-	Paint.render();
-	window.requestAnimationFrame(paint);
-}
 
-window.requestAnimationFrame(paint);
+paint.init();
