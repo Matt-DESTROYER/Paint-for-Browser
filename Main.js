@@ -284,10 +284,11 @@ const Paint = Object.seal({
 	init: function() {
 		for (const colour of this.colours) {
 			document.querySelector(".colour." + colour)
-				.addEventListener("click", function() {
-					Paint.colour = colour;
-				});
+				.addEventListener("click", () => Paint.colour = colour);
 		}
+
+		document.getElementById("colour-picker")
+			.addEventListener("input", () => Paint.colour = this.value);
 
 		function paint() {
 			Paint.update();
