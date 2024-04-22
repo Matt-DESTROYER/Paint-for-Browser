@@ -1,10 +1,11 @@
-// get canvas & ctx
-let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
+// get canvas context
+const ctx = document
+	.getElementById("canvas")
+	.getContext("2d");
 
 // resize canvas
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+ctx.canvas.width = window.innerWidth;
+ctx.canvas.height = window.innerHeight;
 
 // event listeners
 let mouseX, mouseY, pmouseX, pmouseY, mouseDown = false;
@@ -47,7 +48,7 @@ if ("ontouchstart" in window) {
 	}, false);
 }
 window.addEventListener("mousemove", e => {
-	let rect = canvas.getBoundingClientRect();
+	let rect = ctx.canvas.getBoundingClientRect();
 	pmouseX = mouseX;
 	pmouseY = mouseY;
 	mouseX = e.clientX - rect.left;
@@ -270,7 +271,7 @@ let Paint = {
 	},
 	render: function () {
 		ctx.beginPath();
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 		ctx.closePath();
 		this.objects.forEach(x => x.render());
 	}
@@ -287,7 +288,7 @@ function redo() {
 
 // download canvas as png
 function download() {
-	document.getElementById("download").href = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+	document.getElementById("download").href = ctx.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 }
 
 function paint() {
