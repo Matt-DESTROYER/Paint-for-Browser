@@ -193,7 +193,7 @@ class OvalObject {
 		ctx.lineWidth = this.thickness;
 
 		ctx.ellipse(this.x, this.y, this.xRadius, this.yRadius, 0, 0, 2 * Math.PI);
-		
+
 		if (this.fill)
 			ctx.fill();
 		if (this.thickness > 0)
@@ -304,7 +304,7 @@ const Paint = Object.seal({
 
 		document.getElementById("colour-picker")
 			.addEventListener("input", () => Paint.colour = this.value);
-		
+
 		document.getElementById("draw-type")
 			.addEventListener("change", () => Paint.type = this.value);
 
@@ -313,7 +313,7 @@ const Paint = Object.seal({
 			Paint.render();
 			window.requestAnimationFrame(paint);
 		}
-		
+
 		paint();
 	},
 	update: function () {
