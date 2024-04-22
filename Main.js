@@ -75,6 +75,10 @@ if ("ontouchstart" in window) {
 		mouse.y = touches[0].pageY;
 	}, false);
 }
+window.addEventListener("resize", () => {
+	ctx.canvas.width = window.innerWidth;
+	ctx.canvas.height = window.innerHeight;
+});
 window.addEventListener("mousemove", (e) => {
 	const rect = ctx.canvas.getBoundingClientRect();
 
