@@ -303,10 +303,10 @@ const Paint = Object.seal({
 		}
 
 		document.getElementById("colour-picker")
-			.addEventListener("input", () => Paint.colour = this.value);
+			.addEventListener("input", (e) => Paint.colour = e.target.value);
 
 		document.getElementById("draw-type")
-			.addEventListener("change", () => Paint.type = this.value);
+			.addEventListener("change", (e) => Paint.type = e.target.value);
 
 		function paint() {
 			Paint.update();
