@@ -7,58 +7,87 @@ const ctx = document
 ctx.canvas.width = window.innerWidth;
 ctx.canvas.height = window.innerHeight;
 
+// mouse input object
+const mouse = Object.seal({
+	x: null,
+	y: null,
+	down: false,
+	prev: Object.seal({
+		x: null,
+		y: null,
+		down: false
+	}),
+	updatePrev: function () {
+		this.prev.x = this.x;
+		this.prev.y = this.y;
+		this.prev.down = this.down;
+	}
+});
+
 // event listeners
-let mouseX, mouseY, pmouseX, pmouseY, mouseDown = false;
 if ("ontouchstart" in window) {
-	alert("Tablet touches enabled");
+	window.alert("Tablet touches enabled");
+
 	function ongoingTouchIndexById(idToFind) {
-		for (let i = 0; i < ongoingTouches.length; i++) if (ongoingTouches[i].identifier === idToFind) return i;
+		for (let i = 0; i < ongoingTouches.length; i++)
+			if (ongoingTouches[i].identifier === idToFind)
+				return i;
 		return -1;
 	}
-	window.addEventListener("touchstart", function (e) {
+
+	window.addEventListener("touchstart", (e) => {
 		e.preventDefault();
-		let touches = e.changedTouches;
-		pmouseX = mouseX;
-		pmouseY = mouseY;
-		mouseX = touches[0].pageX;
-		mouseY = touches[0].pageY;
-		mouseDown = true;
+
+		const touches = e.changedTouches;
+
+		mouse.updatePrev();
+
+		mouse.x = touches[0].pageX;
+		mouse.y = touches[0].pageY;
+		mouse.down = true;
 	}, false);
-	window.addEventListener("touchend", function (e) {
+
+	window.addEventListener("touchend", (e) => {
 		e.preventDefault();
-		let touches = e.changedTouches;
-		let idx = ongoingTouchIndexById(touches[0].identifier);
+
+		const touches = e.changedTouches;
+
+		const idx = ongoingTouchIndexById(touches[0].identifier);
 		if (idx >= 0) {
-			pmouseX = mouseX;
-			pmouseY = mouseY;
-			mouseX = touches[0].pageX;
-			mouseY = touches[0].pageY;
+			mouse.updatePrev();
+			mouse.x = touches[0].pageX;
+			mouse.y = touches[0].pageY;
 		}
+
 		if (touches.length === 0) {
-			mouseDown = false;
+			mouse.down = false;
 		}
 	}, false);
-	window.addEventListener("touchmove", function (e) {
+
+	window.addEventListener("touchmove", (e) => {
 		e.preventDefault();
-		let touches = e.changedTouches;
-		pmouseX = mouseX;
-		pmouseY = mouseY;
-		mouseX = touches[0].pageX;
-		mouseY = touches[0].pageY;
+
+		const touches = e.changedTouches;
+
+		mouse.updatePrev();
+
+		mouse.x = touches[0].pageX;
+		mouse.y = touches[0].pageY;
 	}, false);
 }
-window.addEventListener("mousemove", e => {
-	let rect = ctx.canvas.getBoundingClientRect();
-	pmouseX = mouseX;
-	pmouseY = mouseY;
-	mouseX = e.clientX - rect.left;
-	mouseY = e.clientY - rect.top;
+window.addEventListener("mousemove", (e) => {
+	const rect = ctx.canvas.getBoundingClientRect();
+
+	mouse.updatePrev();
+
+	mouse.x = e.clientX - rect.left;
+	mouse.y = e.clientY - rect.top;
 });
-window.addEventListener("mousedown", e => {
-	mouseDown = true;
+window.addEventListener("mousedown", (e) => {
+	mouse.down = true;
 });
-window.addEventListener("mouseup", e => {
-	mouseDown = false;
+window.addEventListener("mouseup", (e) => {
+	mouse.down = false;
 });
 
 // Point
@@ -68,6 +97,7 @@ class Point {
 		this.y = y;
 	}
 }
+
 // Object Classes
 // Rectangle
 class RectangleObject {
@@ -82,17 +112,24 @@ class RectangleObject {
 	}
 	render() {
 		ctx.beginPath();
+
 		ctx.lineJoin = "miter";
 		ctx.lineCap = "butt";
 		ctx.fillStyle = this.colour;
 		ctx.strokeStyle = this.colour;
 		ctx.lineWidth = this.thickness;
+
 		ctx.rect(this.x, this.y, this.width, this.height);
-		if (this.fill) ctx.fill();
-		if (this.thickness > 0) ctx.stroke();
+
+		if (this.fill)
+			ctx.fill();
+		if (this.thickness > 0)
+			ctx.stroke();
+
 		ctx.closePath();
 	}
 }
+
 // Circle
 class CircleObject {
 	constructor(x, y, radius, colour, fill = true, thickness = 0) {
@@ -105,15 +142,22 @@ class CircleObject {
 	}
 	render() {
 		ctx.beginPath();
+
 		ctx.fillStyle = this.colour;
 		ctx.strokeStyle = this.colour;
 		ctx.lineWidth = this.thickness;
+
 		ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-		if (this.fill) ctx.fill();
-		if (this.thickness > 0) ctx.stroke();
+
+		if (this.fill)
+			ctx.fill();
+		if (this.thickness > 0)
+			ctx.stroke();
+
 		ctx.closePath();
 	}
 }
+
 // Oval
 class OvalObject {
 	constructor(x, y, xRadius, yRadius, colour, fill = true, thickness = 0) {
@@ -127,15 +171,22 @@ class OvalObject {
 	}
 	render() {
 		ctx.beginPath();
+
 		ctx.fillStyle = this.colour;
 		ctx.strokeStyle = this.colour;
 		ctx.lineWidth = this.thickness;
+
 		ctx.ellipse(this.x, this.y, this.xRadius, this.yRadius, 0, 0, 2 * Math.PI);
-		if (this.fill) ctx.fill();
-		if (this.thickness > 0) ctx.stroke();
+		
+		if (this.fill)
+			ctx.fill();
+		if (this.thickness > 0)
+			ctx.stroke();
+
 		ctx.closePath();
 	}
 }
+
 // Line
 class LineObject {
 	constructor(x1, y1, x2, y2, colour, thickness = 1) {
@@ -148,12 +199,16 @@ class LineObject {
 	}
 	render() {
 		ctx.beginPath();
+
 		ctx.lineCap = "round";
 		ctx.strokeStyle = this.colour;
 		ctx.lineWidth = this.thickness;
+
 		ctx.moveTo(this.x1, this.y1);
 		ctx.lineTo(this.x2, this.y2);
+
 		ctx.stroke();
+
 		ctx.closePath();
 	}
 }
@@ -166,15 +221,19 @@ class LineGroup {
 	}
 	render() {
 		ctx.beginPath();
+
 		ctx.lineJoin = "round";
 		ctx.lineCap = "round";
 		ctx.strokeStyle = this.colour;
 		ctx.lineWidth = this.thickness;
 		ctx.strokeStyle = this.colour;
 		ctx.lineWidth = this.thickness;
+
 		ctx.moveTo(this.points[0].x, this.points[0].y);
 		this.points.forEach(x => ctx.lineTo(x.x, x.y));
+
 		ctx.stroke();
+
 		ctx.closePath();
 	}
 }
@@ -187,23 +246,29 @@ class RubberObject {
 	render() {
 		if (this.points.length > 1) {
 			ctx.globalCompositeOperation = "destination-out";
+
 			ctx.beginPath();
+
 			ctx.strokeStyle = this.colour;
 			ctx.lineWidth = this.thickness;
 			ctx.lineJoin = "round";
 			ctx.lineCap = "round";
 			ctx.strokeStyle = this.colour;
 			ctx.lineWidth = this.thickness;
+
 			ctx.moveTo(this.points[0].x, this.points[0].y);
 			this.points.forEach(x => ctx.lineTo(x.x, x.y));
+
 			ctx.stroke();
+
 			ctx.closePath();
+
 			ctx.globalCompositeOperation = "source-over";
 		}
 	}
 }
 
-let Paint = {
+const Paint = Object.seal({
 	objects: [],
 	backup: [],
 	type: "pen",
@@ -213,55 +278,56 @@ let Paint = {
 	drawing: false,
 	update: function () {
 		if (this.drawing) {
-			if (mouseX !== pmouseX || mouseY !== pmouseY) {
+			if (mouse.x !== mouse.prev.x || mouse.y !== mouse.prev.y) {
 				switch (this.type) {
 					case "pen":
-						this.objects[this.objects.length - 1].points.push(new Point(mouseX, mouseY));
+						this.objects[this.objects.length - 1].points.push(new Point(mouse.x, mouse.y));
 						break;
 					case "rectangle":
-						this.objects[this.objects.length - 1].width = mouseX - this.objects[this.objects.length - 1].x;
-						this.objects[this.objects.length - 1].height = mouseY - this.objects[this.objects.length - 1].y;
+						this.objects[this.objects.length - 1].width = mouse.x - this.objects[this.objects.length - 1].x;
+						this.objects[this.objects.length - 1].height = mouse.y - this.objects[this.objects.length - 1].y;
 						break;
 					case "circle":
-						this.objects[this.objects.length - 1].radius = Math.sqrt(Math.pow(this.objects[this.objects.length - 1].x - mouseX, 2) + Math.pow(this.objects[this.objects.length - 1].y - mouseY, 2));
+						this.objects[this.objects.length - 1].radius = Math.sqrt(Math.pow(this.objects[this.objects.length - 1].x - mouse.x, 2) + Math.pow(this.objects[this.objects.length - 1].y - mouse.y, 2));
 						break;
 					case "oval":
-						this.objects[this.objects.length - 1].xRadius = Math.abs(mouseX - this.objects[this.objects.length - 1].x);
-						this.objects[this.objects.length - 1].yRadius = Math.abs(mouseY - this.objects[this.objects.length - 1].y);
+						this.objects[this.objects.length - 1].xRadius = Math.abs(mouse.x - this.objects[this.objects.length - 1].x);
+						this.objects[this.objects.length - 1].yRadius = Math.abs(mouse.y - this.objects[this.objects.length - 1].y);
 						break;
 					case "line":
-						this.objects[this.objects.length - 1].x2 = mouseX;
-						this.objects[this.objects.length - 1].y2 = mouseY;
+						this.objects[this.objects.length - 1].x2 = mouse.x;
+						this.objects[this.objects.length - 1].y2 = mouse.y;
 						break;
 					case "rubber":
-						this.objects[this.objects.length - 1].points.push(new Point(mouseX, mouseY));
+						this.objects[this.objects.length - 1].points.push(new Point(mouse.x, mouse.y));
 						break;
 					default:
 						break;
 				}
 				this.backup = this.objects.slice();
-				if (!mouseDown) this.drawing = false;
+				if (!mouse.down)
+					this.drawing = false;
 			}
-		} else if (mouseDown) {
+		} else if (mouse.down) {
 			this.drawing = true;
 			switch (this.type) {
 				case "pen":
-					this.objects.push(new LineGroup([new Point(mouseX, mouseY)], this.colour, this.thickness));
+					this.objects.push(new LineGroup([new Point(mouse.x, mouse.y)], this.colour, this.thickness));
 					break;
 				case "rectangle":
-					this.objects.push(new RectangleObject(mouseX, mouseY, 0, 0, this.colour, this.fill, this.thickness));
+					this.objects.push(new RectangleObject(mouse.x, mouse.y, 0, 0, this.colour, this.fill, this.thickness));
 					break;
 				case "circle":
-					this.objects.push(new CircleObject(mouseX, mouseY, 0, this.colour, this.fill, this.thickness));
+					this.objects.push(new CircleObject(mouse.x, mouse.y, 0, this.colour, this.fill, this.thickness));
 					break;
 				case "oval":
-					this.objects.push(new OvalObject(mouseX, mouseY, 0, 0, this.colour, this.fill, this.thickness));
+					this.objects.push(new OvalObject(mouse.x, mouse.y, 0, 0, this.colour, this.fill, this.thickness));
 					break;
 				case "line":
-					this.objects.push(new LineObject(mouseX, mouseY, mouseX, mouseY, this.colour, this.thickness));
+					this.objects.push(new LineObject(mouse.x, mouse.y, mouse.x, mouse.y, this.colour, this.thickness));
 					break;
 				case "rubber":
-					this.objects.push(new RubberObject([new Point(mouseX, mouseY)], this.colour, this.thickness));
+					this.objects.push(new RubberObject([new Point(mouse.x, mouse.y)], this.colour, this.thickness));
 					break;
 				default:
 					break;
@@ -273,17 +339,19 @@ let Paint = {
 		ctx.beginPath();
 		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 		ctx.closePath();
-		this.objects.forEach(x => x.render());
+		this.objects.forEach((x) => x.render());
 	}
-};
+});
 
 // undo function
 function undo() {
-	if (Paint.objects.length > 0) Paint.objects.pop();
+	if (Paint.objects.length > 0)
+		Paint.objects.pop();
 }
 // redo function
 function redo() {
-	if (Paint.backup.length > Paint.objects.length) Paint.objects.push(Paint.backup[Paint.objects.length]);
+	if (Paint.backup.length > Paint.objects.length)
+		Paint.objects.push(Paint.backup[Paint.objects.length]);
 }
 
 // download canvas as png
