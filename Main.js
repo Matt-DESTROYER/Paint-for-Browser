@@ -100,6 +100,9 @@ class Point {
 		this.x = x;
 		this.y = y;
 	}
+	clone() {
+		return new Point(this.x, this.y);
+	}
 }
 
 // Object Classes
@@ -113,6 +116,9 @@ class RectangleObject {
 		this.colour = colour;
 		this.fill = fill;
 		this.thickness = thickness;
+	}
+	clone() {
+		return new RectangleObject(this.x, this.y, this.width, this.height, this.colour, this.fill, this.thickness);
 	}
 	render() {
 		ctx.beginPath();
@@ -144,6 +150,9 @@ class CircleObject {
 		this.fill = fill;
 		this.thickness = thickness;
 	}
+	clone() {
+		return new CircleObject(this.x, this.y, this.radius, this.colour, this.fill, this.thickness);
+	}
 	render() {
 		ctx.beginPath();
 
@@ -173,6 +182,9 @@ class OvalObject {
 		this.fill = fill;
 		this.thickness = thickness;
 	}
+	clone() {
+		return new OvalObject(this.x, this.y, this.xRadius, this.yRadius, this.colour, this.fill, this.thickness);
+	}
 	render() {
 		ctx.beginPath();
 
@@ -200,6 +212,9 @@ class LineObject {
 		this.y2 = y2;
 		this.colour = colour;
 		this.thickness = thickness;
+	}
+	clone() {
+		return new LineObject(this.x1, this.y1, this.x2, this.y2, this.colour, this.thickness);
 	}
 	render() {
 		ctx.beginPath();
