@@ -400,4 +400,4 @@ function download() {
 }
 
 
-paint.init();
+Paint.init();
