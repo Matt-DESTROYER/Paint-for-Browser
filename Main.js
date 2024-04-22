@@ -289,6 +289,9 @@ const Paint = Object.seal({
 
 		document.getElementById("colour-picker")
 			.addEventListener("input", () => Paint.colour = this.value);
+		
+		document.getElementById("draw-type")
+			.addEventListener("change", () => Paint.type = this.value);
 
 		function paint() {
 			Paint.update();
