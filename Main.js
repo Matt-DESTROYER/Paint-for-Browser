@@ -302,6 +302,9 @@ const Paint = Object.seal({
 				.addEventListener("click", () => Paint.colour = colour);
 		}
 
+		document.getElementById("pen-thickness")
+			.addEventListener("input", (e) => Paint.thickness = e.target.value);
+
 		document.getElementById("colour-picker")
 			.addEventListener("input", (e) => Paint.colour = e.target.value);
 
