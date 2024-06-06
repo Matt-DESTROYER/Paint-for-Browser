@@ -87,10 +87,10 @@ window.addEventListener("mousemove", (e) => {
 	mouse.x = e.clientX - rect.left;
 	mouse.y = e.clientY - rect.top;
 });
-window.addEventListener("mousedown", (e) => {
+ctx.canvas.addEventListener("mousedown", (e) => {
 	mouse.down = true;
 });
-window.addEventListener("mouseup", (e) => {
+ctx.canvas.addEventListener("mouseup", (e) => {
 	mouse.down = false;
 });
 
