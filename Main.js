@@ -311,6 +311,28 @@ const Paint = Object.seal({
 		document.getElementById("draw-type")
 			.addEventListener("change", (e) => Paint.type = e.target.value);
 
+		// undo function
+		document.getElementById("undo")
+			.addEventListener("click", function undo() {
+				if (Paint.objects.length > 0)
+					Paint.objects.pop();
+			});
+		// redo function
+		document.getElementById("redo")
+			.addEventListener("click", function redo() {
+				if (Paint.backup.length > Paint.objects.length)
+					Paint.objects.push(Paint.backup[Paint.objects.length]);
+			});
+
+		// download canvas as png
+		document.getElementById("saveas")
+			.addEventListener("click", (function() {
+				const download = document.getElementById("download");
+				return function download() {
+					download.href = ctx.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+				};
+			})());
+
 		function paint() {
 			Paint.update();
 			Paint.render();
@@ -385,22 +407,6 @@ const Paint = Object.seal({
 		this.objects.forEach((x) => x.render());
 	}
 });
-
-// undo function
-function undo() {
-	if (Paint.objects.length > 0)
-		Paint.objects.pop();
-}
-// redo function
-function redo() {
-	if (Paint.backup.length > Paint.objects.length)
-		Paint.objects.push(Paint.backup[Paint.objects.length]);
-}
-
-// download canvas as png
-function download() {
-	document.getElementById("download").href = ctx.canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-}
 
 
 Paint.init();
